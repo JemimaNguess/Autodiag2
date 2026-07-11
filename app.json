@@ -5,7 +5,6 @@
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "scheme": "autodiagsonore",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
@@ -19,14 +18,18 @@
         "monochromeImage": "./assets/images/android-icon-monochrome.png"
       },
       "edgeToEdgeEnabled": true,
-      "predictiveBackGestureEnabled": false
+      "predictiveBackGestureEnabled": false,
+      "permissions": [
+        "android.permission.RECORD_AUDIO",
+        "android.permission.MODIFY_AUDIO_SETTINGS"
+      ],
+      "package": "com.moaye_jemima.AutoDiagSonore"
     },
     "web": {
-      "output": "static",
+      "output": "single",
       "favicon": "./assets/images/favicon.png"
     },
     "plugins": [
-      "expo-router",
       [
         "expo-splash-screen",
         {
@@ -38,11 +41,22 @@
             "backgroundColor": "#000000"
           }
         }
-      ]
+      ],
+      [
+        "expo-audio",
+        {
+          "microphonePermission": "Autoriser l'accès au microphone pour diagnostiquer votre moteur."
+        }
+      ],
+      "expo-asset"
     ],
     "experiments": {
-      "typedRoutes": true,
       "reactCompiler": true
+    },
+    "extra": {
+      "eas": {
+        "projectId": "ee32399b-717e-4ef9-b091-b528b3d3ccf4"
+      }
     }
   }
 }
