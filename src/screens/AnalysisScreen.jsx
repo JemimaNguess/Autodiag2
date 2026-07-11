@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { View, Text, StyleSheet, Animated, Easing } from 'react-native';
+import { View, Text, StyleSheet, Animated, Easing, Platform } from 'react-native';
+// import { View, Text, StyleSheet, Animated, Easing } from 'react-native';
 import { useTheme } from '../theme/ThemeContext';
 import { saveDiagnostic } from '../utils/historyStorage';
 
@@ -40,14 +41,20 @@ export default function AnalysisScreen({ route, navigation }) {
   const diagnose = async (fileUri) => {
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
-
     try {
       const formData = new FormData();
-      formData.append('audio', {
-        uri: fileUri,
-        name: 'moteur.wav',
-        type: 'audio/wav',
-      });
+
+      if (Platform.OS === 'web') {
+        const response = await fetch(fileUri);
+        const blob = await response.blob();
+        formData.append('audio', blob, 'moteur.wav');
+      } else {
+        formData.append('audio', {
+          uri: fileUri,
+          name: 'moteur.wav',
+          type: 'audio/wav',
+        });
+      }
 
       const res = await fetch(`${API_URL}/api/diagnose`, {
         method: 'POST',
